@@ -5,27 +5,47 @@ namespace UseCase1.Services;
 
 public class CountriesFilterService: ICountriesFilterService
 {
-    private const string AscendingOrder = "ascend";
-    private const string DescendingOrder = "descend";
-    public IEnumerable<Country> FilterByName(List<Country> sourceCountries, string countryName)
+    private readonly ILogger<CountriesFilterService> _logger;
+    private readonly IRestCountriesApi _api;
+
+    public CountriesFilterService(ILogger<CountriesFilterService> logger, IRestCountriesApi api)
     {
-        return sourceCountries.Where(a => a.Name.Common.Contains(countryName, StringComparison.OrdinalIgnoreCase));
+        _logger = logger;
+        _api = api;
     }
 
-    public IEnumerable<Country> FilterByPopulation(List<Country> sourceCountries, int population)
+    public async Task<IEnumerable<Country>> GetPreparedCountries(string? countryName, int? population, string? nameSortOrder,
+        int? pageSize)
     {
-        return sourceCountries.Where(a => a.Population < population);
+        var countries = await TryGetDataFromExternalApi();
+
+        return countries.ToList().FilterByName(countryName).FilterByPopulation(population)
+            .SortByName(nameSortOrder).GetPagedData(pageSize).Select(MapToModel);
     }
 
-    public IEnumerable<Country> SortByName(List<Country> sourceCountries, string order = AscendingOrder)
+    private Country MapToModel(ExternalCountry externalCountry)
     {
-        return order == DescendingOrder
-            ? sourceCountries.OrderByDescending(a => a.Name.Common)
-            : sourceCountries.OrderBy(a => a.Name.Common);
+        return new Country
+        {
+            Name = externalCountry.Name.Common,
+            Population = externalCountry.Population
+        };
     }
 
-    public IEnumerable<Country> GetPagedData(List<Country> sourceCountries, int pageSize, int pageIndex = 0)
+    private async Task<IEnumerable<ExternalCountry>> TryGetDataFromExternalApi()
     {
-        return sourceCountries.GetRange(pageIndex, pageSize);
+        try
+        {
+            _logger.LogTrace("Getting data from external API");
+
+            var countries = await _api.GetAll();
+
+            return countries;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error while getting data from external API", e);
+            throw;
+        }
     }
 }

@@ -3,8 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace UseCase1.Models;
 
-public class Country
+public class ExternalCountry
 {
-    public string Name { get; set; }
+    public CountryName Name { get; set; }
     public int Population { get; set; }
 }
