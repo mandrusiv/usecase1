@@ -9,4 +9,9 @@ public class CountriesFilterService: ICountriesFilterService
     {
         return sourceCountries.Where(a => a.Name.Common.Contains(countryName, StringComparison.OrdinalIgnoreCase));
     }
+
+    public IEnumerable<Country> FilterByPopulation(int population, List<Country> sourceCountries)
+    {
+        return sourceCountries.Where(a => a.Population < population);
+    }
 }
