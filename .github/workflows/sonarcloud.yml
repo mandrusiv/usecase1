@@ -22,5 +22,5 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
           args:
-            -Dsonar.projectKey=usecase1
+            -Dsonar.projectKey=mandrusiv_usecase1
             -Dsonar.organization=mandrusiv
