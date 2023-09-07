@@ -24,8 +24,8 @@ public class CountriesFilterService: ICountriesFilterService
             : sourceCountries.OrderBy(a => a.Name.Common);
     }
 
-    public IEnumerable<Country> GetPagedData(List<Country> sourceCountries, int pageSize)
+    public IEnumerable<Country> GetPagedData(List<Country> sourceCountries, int pageSize, int pageIndex = 0)
     {
-        return sourceCountries.GetRange(0, pageSize);
+        return sourceCountries.GetRange(pageIndex, pageSize);
     }
 }
