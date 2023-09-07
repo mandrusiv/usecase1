@@ -24,3 +24,4 @@ jobs:
           args:
             -Dsonar.projectKey=
             -Dsonar.organization=
+            -X
