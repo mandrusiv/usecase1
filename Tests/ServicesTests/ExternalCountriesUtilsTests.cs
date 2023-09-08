@@ -1,10 +1,4 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
-using UseCase1.Models;
-using UseCase1.Services;
-
-namespace UseCase1.Tests;
+﻿namespace Tests.ServicesTests;
 
 [TestFixture]
 public class ExternalCountriesUtilsTests
