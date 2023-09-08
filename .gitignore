@@ -9,3 +9,5 @@
 /.vs
 /UseCase1/obj
 /UseCase1/appsettings.Development.json
+/Tests/bin/Debug/net6.0
+/Tests/obj
